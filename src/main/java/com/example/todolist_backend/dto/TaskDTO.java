@@ -12,5 +12,5 @@ import java.time.LocalDate;
 public class TaskDTO {
 
     private LocalDate date;
-    private String content;
+    private String taskContent;
 }

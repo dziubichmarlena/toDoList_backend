@@ -22,4 +22,8 @@ public class TaskService {
     public List<Task> getAllTaskByUser(User user){
         return taskRepo.getAllByUser(user);
     }
+
+    public void saveTask(Task task){
+        taskRepo.save(task);
+    }
 }

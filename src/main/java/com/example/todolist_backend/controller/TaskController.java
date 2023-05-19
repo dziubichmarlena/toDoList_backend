@@ -2,14 +2,13 @@ package com.example.todolist_backend.controller;
 
 
 import com.example.todolist_backend.dto.TaskDTO;
+import com.example.todolist_backend.model.Task;
 import com.example.todolist_backend.model.User;
 import com.example.todolist_backend.service.TaskService;
 import com.example.todolist_backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +26,12 @@ public class TaskController {
                .stream()
                .map(task -> new TaskDTO(task.getDate(), task.getTaskContent()))
                .toList();
+   }
+
+
+   @PostMapping(value = "addTask")
+    public void addTask(@AuthenticationPrincipal User user, @RequestBody Task task){
+        task.setUser(user);
+        taskService.saveTask(task);
    }
 }
