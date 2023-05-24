@@ -1,6 +1,7 @@
 package com.example.todolist_backend.controller;
 
 
+import com.example.todolist_backend.dto.UpdateTaskDTO;
 import com.example.todolist_backend.dto.TaskDTO;
 import com.example.todolist_backend.model.Task;
 import com.example.todolist_backend.model.User;
@@ -24,14 +25,23 @@ public class TaskController {
     public List<TaskDTO> getAllTasks(@AuthenticationPrincipal User user){
        return taskService.getAllTaskByUser(user)
                .stream()
-               .map(task -> new TaskDTO(task.getDate(), task.getTaskContent()))
+               .map(task -> new TaskDTO(task.getId(), task.getDate(), task.getTaskContent(), task.getActionOnTask(), task.getPriority()))
                .toList();
    }
 
 
-   @PostMapping(value = "addTask")
+   @PostMapping("/tasks")
     public void addTask(@AuthenticationPrincipal User user, @RequestBody Task task){
         task.setUser(user);
         taskService.saveTask(task);
+   }
+
+   @PutMapping("/tasks/{taskId}")
+    public void updateTaskPriority(@AuthenticationPrincipal User user, @PathVariable("taskId") Long id,
+                           @RequestBody UpdateTaskDTO updateTaskDTO){
+       Task task = taskService.findTaskById(id);
+       task.setPriority(updateTaskDTO.getTaskPriority());
+       task.setActionOnTask(updateTaskDTO.getActionOnTask());
+       taskService.saveTask(task);
    }
 }

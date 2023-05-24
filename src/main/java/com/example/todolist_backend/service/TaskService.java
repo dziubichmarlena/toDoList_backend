@@ -26,4 +26,8 @@ public class TaskService {
     public void saveTask(Task task){
         taskRepo.save(task);
     }
+
+    public Task findTaskById(Long id){
+        return taskRepo.findTaskById(id);
+    }
 }

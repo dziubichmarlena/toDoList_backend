@@ -1,19 +1,16 @@
 package com.example.todolist_backend.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class TaskDTO {
-
-    private Long id;
-    private LocalDate date;
-    private String taskContent;
+@NoArgsConstructor
+public class UpdateTaskDTO {
+    private int taskPriority;
     private int actionOnTask;
-    private int priority;
 }

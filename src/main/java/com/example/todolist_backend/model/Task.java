@@ -21,6 +21,8 @@ public class Task {
     private Long id;
     private String taskContent;
     private LocalDate date;
+    private int actionOnTask = 1;
+    private int priority;
 
     @ManyToOne
     private User user;
