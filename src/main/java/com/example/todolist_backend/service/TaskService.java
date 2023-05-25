@@ -30,4 +30,8 @@ public class TaskService {
     public Task findTaskById(Long id){
         return taskRepo.findTaskById(id);
     }
+
+    public void deleteTaskById(Long id){
+        taskRepo.deleteTaskById(id);
+    }
 }
