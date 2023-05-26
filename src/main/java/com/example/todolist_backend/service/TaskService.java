@@ -34,4 +34,8 @@ public class TaskService {
     public void deleteTaskById(Long id){
         taskRepo.deleteTaskById(id);
     }
+
+    public List<Task> getAllTaskByUserAndActionOnTask(User user, int actionOnTask){
+        return taskRepo.getTasksByUserAndActionOnTask(user, actionOnTask);
+    }
 }

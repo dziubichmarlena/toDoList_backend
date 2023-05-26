@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,18 @@ public class TaskController {
     public List<TaskDTO> getAllTasks(@AuthenticationPrincipal User user) {
         return taskService.getAllTaskByUser(user)
                 .stream()
+                .filter(task -> task.getActionOnTask() == 1 || task.getActionOnTask() == 2)
                 .map(task -> new TaskDTO(task.getId(), task.getDate(), task.getTaskContent(), task.getActionOnTask(), task.getPriority()))
+                .sorted(Comparator.comparing(TaskDTO::getDate).reversed())
+                .toList();
+    }
+
+    @GetMapping("/tasks/{actionOnTask}")
+    public List<TaskDTO> getFilteredTask(@AuthenticationPrincipal User user, @PathVariable("actionOnTask") int actionOnTask ){
+        return  taskService.getAllTaskByUserAndActionOnTask(user, actionOnTask)
+                .stream()
+                .map(task -> new TaskDTO(task.getId(), task.getDate(), task.getTaskContent(), task.getActionOnTask(), task.getPriority()))
+                .sorted(Comparator.comparing(TaskDTO::getDate).reversed())
                 .toList();
     }
 
@@ -50,7 +62,6 @@ public class TaskController {
     @DeleteMapping("tasks/{taskId}")
     @Transactional
     public void deleteTask(@AuthenticationPrincipal User user, @PathVariable("taskId") Long id) {
-        System.out.println(id);
         taskService.deleteTaskById(id);
     }
 }
