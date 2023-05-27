@@ -61,11 +61,11 @@ public class UserAuthenticationProvider {
 
     public Authentication validateCredentials(LoginRequestDTO credentialsDto) {
         User user = userService.findUserByLogin(credentialsDto.getLogin());
-        //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-//        if (user == null || !encoder.matches(credentialsDto.getPassword(), user.getPassword())) {
-//            throw new RuntimeException("Invalid credentials");
-//        }
+        if (user == null || !encoder.matches(credentialsDto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
     }

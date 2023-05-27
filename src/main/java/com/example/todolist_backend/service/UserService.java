@@ -18,4 +18,8 @@ public class UserService {
     public User findUserByLogin(String login){
         return userRepo.findUserByLogin(login);
     }
+
+    public void saveUser(User user){
+        userRepo.save(user);
+    }
 }

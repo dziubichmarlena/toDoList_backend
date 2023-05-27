@@ -7,8 +7,10 @@ import com.example.todolist_backend.model.User;
 import com.example.todolist_backend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -19,10 +21,11 @@ public class UserController {
 
     private final UserService userService;
     private final UserAuthenticationProvider userAuthenticationProvider;
-
-    public UserController(UserService userService, UserAuthenticationProvider userAuthenticationProvider) {
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    public UserController(UserService userService, UserAuthenticationProvider userAuthenticationProvider, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userService = userService;
         this.userAuthenticationProvider = userAuthenticationProvider;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
 
@@ -31,5 +34,13 @@ public class UserController {
         LoginResponseDTO responseDTO = new LoginResponseDTO();
         responseDTO.setToken(userAuthenticationProvider.createToken(user));
         return ok(responseDTO);
+    }
+
+    @PostMapping("register")
+    public void register(@RequestBody User user){
+        User newUser = new User();
+        newUser.setLogin(user.getLogin());
+        newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userService.saveUser(newUser);
     }
 }
